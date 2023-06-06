@@ -1,0 +1,9 @@
+{
+	"name": "gouthamdatafactory",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "f136dd0f-71fc-4452-afd1-9e35667fcf5a",
+		"tenantId": "a837db11-0fef-410a-868c-4236e00aba01"
+	}
+}
