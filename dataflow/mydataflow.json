@@ -1,0 +1,66 @@
+{
+	"name": "mydataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "casesdeaths",
+						"type": "DatasetReference"
+					},
+					"name": "casesanddeaths"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "Europe"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "INDICATORPIVOT"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          country as string,",
+				"          country_code as string,",
+				"          continent as string,",
+				"          population as integer,",
+				"          indicator as string,",
+				"          daily_count as integer,",
+				"          date as date,",
+				"          rate_14_day as double,",
+				"          source as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> casesanddeaths",
+				"casesanddeaths filter(continent=='Europe'&&not(isNull(country_code))) ~> Europe",
+				"Europe select(mapColumn(",
+				"          country,",
+				"          country_code,",
+				"          population,",
+				"          indicator,",
+				"          daily_count,",
+				"          date,",
+				"          source",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select1",
+				"select1 pivot(groupBy(country,",
+				"          country_code,",
+				"          population,",
+				"          date,",
+				"          source),",
+				"     pivotBy(indicator, ['deaths']),",
+				"     count = sum(daily_count),",
+				"     columnNaming: '$N_$V',",
+				"     lateral: true) ~> INDICATORPIVOT"
+			]
+		}
+	}
+}
