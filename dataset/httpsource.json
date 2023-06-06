@@ -1,0 +1,38 @@
+{
+	"name": "httpsource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HttpServer1",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"soucebaseurl": {
+					"value": "@dataset().BASEURL",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"BASEURL": {
+				"type": "string"
+			},
+			"RELATIVEURL": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@dataset().RELATIVEURL",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
